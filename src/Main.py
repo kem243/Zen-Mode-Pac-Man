@@ -1,6 +1,7 @@
-
+# Logger import
+from Logger.Logger import logger
 
 
 
 if __name__ == "__main__":
-    print("Start")
+    logger.debug("Start")
