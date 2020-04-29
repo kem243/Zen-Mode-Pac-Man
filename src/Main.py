@@ -13,17 +13,18 @@ pygame.display.init()
 pygame.joystick.init()
 
 # Sprites
-moveRight = [pygame.image.load('Sprites/PacMan_Animate1.png')
-            ,pygame.image.load('Sprites/PacMan_Animate2.png')
-            ,pygame.image.load('Sprites/PacMan_Animate3.png')
-            ,pygame.image.load('Sprites/PacMan_Animate4.png')
-            ,pygame.image.load('Sprites/PacMan_Animate5.png')
-            ,pygame.image.load('Sprites/PacMan_Animate4.png')
-            ,pygame.image.load('Sprites/PacMan_Animate3.png')
-            ,pygame.image.load('Sprites/PacMan_Animate2.png')
-            ,pygame.image.load('Sprites/PacMan_Animate1.png')]
+PATH_TO_ASSETS = (r'../assets/')
+moveRight = [pygame.image.load(PATH_TO_ASSETS + 'Sprites/PacMan_Animate1.png')
+            ,pygame.image.load(PATH_TO_ASSETS + 'Sprites/PacMan_Animate2.png')
+            ,pygame.image.load(PATH_TO_ASSETS + 'Sprites/PacMan_Animate3.png')
+            ,pygame.image.load(PATH_TO_ASSETS + 'Sprites/PacMan_Animate4.png')
+            ,pygame.image.load(PATH_TO_ASSETS + 'Sprites/PacMan_Animate5.png')
+            ,pygame.image.load(PATH_TO_ASSETS + 'Sprites/PacMan_Animate4.png')
+            ,pygame.image.load(PATH_TO_ASSETS + 'Sprites/PacMan_Animate3.png')
+            ,pygame.image.load(PATH_TO_ASSETS + 'Sprites/PacMan_Animate2.png')
+            ,pygame.image.load(PATH_TO_ASSETS + 'Sprites/PacMan_Animate1.png')]
 
-background = pygame.image.load('Images/PacMazeBig1.png')
+background = pygame.image.load(PATH_TO_ASSETS + 'Images/PacMazeBig1.png')
 
 # Screen size constants
 SCREEN_WIDTH = 800
