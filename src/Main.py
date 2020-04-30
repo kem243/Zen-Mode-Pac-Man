@@ -33,9 +33,7 @@ SCREEN_HEIGHT = 886
 # Character Info
 character_x = 500
 character_y = 500
-character_radius = 25
-character_width = 40
-character_height = 60
+character_radius = 15
 movement = "Right"
 moveCount = 0
 
@@ -46,15 +44,16 @@ character_weight = 5
 joyCount = pygame.joystick.get_count()
 logger.debug("JoySticks Connected: " + str(joyCount))
 
-#Keyboard
+#Keyboard - evan stopped using this
 inputs = pygame.key.get_pressed()
 
 #Controller
 usedJoy = False
 if joyCount > 0:
     usedJoy = True
-joystick = pygame.joystick.Joystick(0)
-joystick.init()
+    joystick = pygame.joystick.Joystick(0)
+    pygame.joystick.Joystick()
+    joystick.init()
 
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Zen Mode Pac-Man")
@@ -79,43 +78,35 @@ def updateMovement():
 
     #Switch Pro Controller
     #JOYSTICKS
-    stick1_horiz = joystick.get_axis(0)
-    stick1_vert = joystick.get_axis(1)
-    stick2_horiz = joystick.get_axis(2)
-    stick2_vert = joystick.get_axis(3)
+    if usedJoy:
+        stick1_horiz = joystick.get_axis(0)
+        stick1_vert = joystick.get_axis(1)
+        stick2_horiz = joystick.get_axis(2)
+        stick2_vert = joystick.get_axis(3)
 
-    #A, B, X, Y
-    Button_B = joystick.get_button(0)
-    Button_A = joystick.get_button(1)
-    Button_X = joystick.get_button(2)
-    Button_Y = joystick.get_button(3)
+        #A, B, X, Y
+        Button_B = joystick.get_button(0)
+        Button_A = joystick.get_button(1)
+        Button_X = joystick.get_button(2)
+        Button_Y = joystick.get_button(3)
 
-    #Shoulders and Triggers
-    Shoulder_L = joystick.get_button(4)
-    Shoulder_R = joystick.get_button(5)
-    Trigger_L = joystick.get_button(6)
-    Trigger_R = joystick.get_button(7)
+        #Shoulders and Triggers
+        Shoulder_L = joystick.get_button(4)
+        Shoulder_R = joystick.get_button(5)
+        Trigger_L = joystick.get_button(6)
+        Trigger_R = joystick.get_button(7)
 
-    #Plus, Minus, Home, Capture
-    Minus = joystick.get_button(8)
-    Plus = joystick.get_button(9)
-    Home = joystick.get_button(12)
-    Capture = joystick.get_button(13)
+        #Plus, Minus, Home, Capture
+        Minus = joystick.get_button(8)
+        Plus = joystick.get_button(9)
+        Home = joystick.get_button(12)
+        Capture = joystick.get_button(13)
 
-    #DPAD
-    hats = joystick.get_numhats()
-    Dpad = joystick.get_hat(0)
+        #DPAD
+        hats = joystick.get_numhats()
+        Dpad = joystick.get_hat(0)
 
-    if not usedJoy:
-        if inputs[pygame.K_UP] and character_y > (character_radius+5):
-            character_y -= character_vel
-        if inputs[pygame.K_DOWN] and character_y < (SCREEN_WIDTH-character_radius-5):
-            character_y += character_vel
-        if inputs[pygame.K_LEFT] and character_x > (character_radius+5):
-            character_x -= character_vel
-        if inputs[pygame.K_RIGHT] and character_x < (SCREEN_HEIGHT-character_radius-5):
-            character_x += character_vel
-    if usedJoy == True:
+    if usedJoy:
         #Right Dpad
         if Dpad == (1, 0):
             if (character_x + character_vel) > SCREEN_WIDTH-64:
@@ -160,6 +151,15 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+
+        # Flip the display
+        pygame.display.flip()
+
+        updateMovement()
+        updateGameWindow()
+        clock.tick(30)
+
+        # pygame.quit()
 
         # Flip the display
         pygame.display.flip()
