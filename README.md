@@ -1,5 +1,5 @@
 # Zen Mode Pac Man
-The Adventures of Chungus
+
 
 ## Motivation
 > TODO
