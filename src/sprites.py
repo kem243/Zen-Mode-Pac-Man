@@ -1,8 +1,9 @@
 """Module containing the sprites"""
 
 import pygame
+import math
 
-from constants import PLAYER_SPEED
+from constants import PLAYER_SPEED, TILESIZE
 
 class Player(pygame.sprite.Sprite):
     """Class to represent pacman"""
@@ -11,10 +12,10 @@ class Player(pygame.sprite.Sprite):
         self.game = game
         self.image = image
         self.rect = self.image.get_rect()
-        self.x = x + self.rect.width / 2
+        self.x = x + (self.rect.width / 2) - (TILESIZE / 2)
         self.y = y + self.rect.width / 2
         self.rect.center = (self.x, self.y)
-        self.velocity = pygame.math.Vector2(PLAYER_SPEED, 0)
+        self.velocity = pygame.math.Vector2(-PLAYER_SPEED, 0)
 
     def get_keys(self) -> None:
         """Sets velocity based on the pressed key"""
@@ -50,6 +51,14 @@ class Player(pygame.sprite.Sprite):
                     self.y = hits[0].rect.bottom + self.rect.height / 2
                 self.velocity.y = 0
                 self.rect.centery = self.y
+
+    def eat_pellets(self):
+        """Checks whether pacman is above a pellet. If he is, the pellet is eaten"""
+        def collided(one: pygame.sprite.Sprite, two: pygame.sprite.Sprite) -> bool:
+            return math.isclose(one.rect.centerx - two.rect.centerx, 0, abs_tol=3) and \
+                   math.isclose(one.rect.centery - two.rect.centery, 0, abs_tol=3)
+
+        pygame.sprite.spritecollide(self, self.game.pellets, True, collided)
     
     def update(self) -> None:
         """Updates the sprite's position"""
@@ -60,6 +69,7 @@ class Player(pygame.sprite.Sprite):
         self.collide_with_walls(self.game.walls, 'x')
         self.rect.centery = self.y
         self.collide_with_walls(self.game.walls, 'y')
+        self.eat_pellets()
 
 class Wall(pygame.sprite.Sprite):
     """A sprite to represent a wall/obstacle in the game"""
@@ -67,6 +77,18 @@ class Wall(pygame.sprite.Sprite):
         super().__init__(game.walls)
         self.game = game
         self.rect = pygame.Rect(x, y, width, height)
+        self.x = x
+        self.y = y
+        self.rect.x = x
+        self.rect.y = y
+
+class Pellet(pygame.sprite.Sprite):
+    """A sprite to represent the small yellow pellets on the board"""
+    def __init__(self, game, image, x, y):
+        super().__init__(game.pellets, game.all_sprites)
+        self.game = game
+        self.image = image
+        self.rect = self.image.get_rect()
         self.x = x
         self.y = y
         self.rect.x = x

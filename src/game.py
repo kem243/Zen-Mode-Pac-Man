@@ -4,7 +4,7 @@ import pygame
 from spritesheet import Spritesheet
 from tiledmap import TiledMap
 from constants import TILESIZE, DISPLAY_H, DISPLAY_W
-from sprites import Player, Wall
+from sprites import Player, Wall, Pellet
 
 class Game:
     """Top-level class to represent a single game of pacman"""
@@ -28,13 +28,17 @@ class Game:
         map_rect = self.map_image.get_rect()
 
         # Sprite initialization
-        my_spritesheet = Spritesheet(r'../assets/sprites.png')
-        self.open_mouth = my_spritesheet.get_sprite(0, 0, TILESIZE, TILESIZE)
+        pacman_sprites = Spritesheet(r'../assets/sprites.png')
+        self.open_mouth = pacman_sprites.get_sprite(0, 0, TILESIZE, TILESIZE)
+
+        pellet_sprites = Spritesheet(r'../assets/small_pellet.png')
+        self.pellet_sprite = pellet_sprites.get_sprite(0, 0, TILESIZE, TILESIZE)
 
     def new(self):
         """Initializes data and sprites"""
         self.all_sprites = pygame.sprite.Group()
         self.walls = pygame.sprite.Group()
+        self.pellets = pygame.sprite.Group()
 
         for tile_object in self.map.tmxdata.objects:
             if tile_object.type == 'wall':
@@ -43,6 +47,8 @@ class Game:
             if tile_object.type == 'player':
                 self.player = Player(self, self.open_mouth,
                                      tile_object.x, tile_object.y)
+            if tile_object.type == 'small_pellet':
+                Pellet(self, self.pellet_sprite, tile_object.x, tile_object.y)
 
     def handle_events(self):
         """Handles events done by the player"""
@@ -66,7 +72,7 @@ class Game:
         self.canvas.blit(self.map_image, (0, 0))
         # self.draw_grid()
         for sprite in self.all_sprites:
-            self.canvas.blit(sprite.image, self.player.rect)
+            self.canvas.blit(sprite.image, sprite.rect)
         self.window.blit(self.canvas, (0,0))
 
     def run(self):
